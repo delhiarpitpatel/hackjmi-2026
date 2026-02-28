@@ -7,6 +7,28 @@
     <title>Vite + React + TS</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              app: {
+                main: '#FDFBF7',      // Soft Cream (Low Glare)
+                card: '#F3EFE0',      // Warm Stone (Defined Surface)
+                border: '#E5E0D0',    // Subtle Darker Border for Depth
+                primary: '#1E293B',   // Deep Charcoal (High Contrast)
+                secondary: '#64748B', // Muted Slate
+                accent: '#4338CA',    // Deep Indigo
+                danger: '#DC2626',    // High-Visibility Red
+              }
+            },
+            borderRadius: {
+              '4xl': '2rem',
+            }
+          }
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

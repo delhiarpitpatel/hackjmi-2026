@@ -17,8 +17,4 @@ echo "Activating the local environment"
 
 
 echo "running your application" 
-<<<<<<< HEAD
-python3 app.py 
-=======
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
->>>>>>> 14795c3 (initial backend setup)
