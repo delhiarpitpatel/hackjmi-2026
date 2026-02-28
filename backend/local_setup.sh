@@ -20,5 +20,9 @@ echo "installing the required libraries"
 pip install --upgrade pip 
 pip install -r requirements.txt 
 
+<<<<<<< HEAD
+=======
+cp .env.example .env
+>>>>>>> 14795c3 (initial backend setup)
 
 echo "Setup Complete" 
