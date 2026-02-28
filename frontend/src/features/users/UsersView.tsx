@@ -10,7 +10,7 @@ interface Props {
 
 export default function UsersView({ user, loading, error, onRefresh }: Props) {
   return (
-    <div className="p-4 bg-[#F3EFE0] dark:bg-[#1E293B] rounded-3xl shadow max-w-md mx-auto">
+    <div className="p-4 bg-app-card rounded-3xl shadow max-w-md mx-auto">
       <h2 className="text-lg font-semibold mb-2">Profile</h2>
       {loading && <p>Loading…</p>}
       {error && <p className="text-red-500">{error}</p>}

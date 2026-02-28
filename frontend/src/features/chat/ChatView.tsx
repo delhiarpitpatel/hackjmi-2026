@@ -14,7 +14,7 @@ export default function ChatView({ sessionId, setSessionId, messages, loading, e
   const [input, setInput] = useState('');
 
   return (
-    <div className="p-4 bg-[#F3EFE0] dark:bg-[#1E293B] rounded-3xl shadow max-w-md mx-auto">
+    <div className="p-4 bg-app-card rounded-3xl shadow max-w-md mx-auto">
       <h2 className="text-lg font-semibold mb-2">Chat</h2>
       <input type="text" placeholder="Session ID" value={sessionId} onChange={e => setSessionId(e.target.value)} className="border p-2 rounded mb-2 w-full" />
       <button onClick={() => onSend(input)} disabled={loading || !input} className="px-4 py-2 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 disabled:opacity-50 mb-2">Send</button>

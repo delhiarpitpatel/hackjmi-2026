@@ -11,7 +11,7 @@ export default function AuthView({ onLogin, loading, error }: Props) {
   const [password, setPassword] = useState('');
 
   return (
-    <div className="p-6 bg-[#F3EFE0] dark:bg-[#1E293B] rounded-3xl shadow max-w-md mx-auto">
+    <div className="p-6 bg-app-card rounded-3xl shadow max-w-md mx-auto">
       <h2 className="text-xl font-semibold mb-4">Login</h2>
       {error && <p className="text-red-500">{error}</p>}
       <input

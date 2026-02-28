@@ -11,7 +11,7 @@ interface Props {
 
 export default function EmergencyView({ history, contacts, loading, error, onRefresh }: Props) {
   return (
-    <div className="p-4 bg-app-card dark:bg-[#1E293B] rounded-3xl shadow">
+    <div className="p-4 bg-app-card rounded-3xl shadow">
       <h2 className="text-lg font-semibold mb-2 text-app-danger">Emergency Dashboard</h2>
       {loading && <p>Loading…</p>}
       {error && <p className="text-app-danger">{error}</p>}

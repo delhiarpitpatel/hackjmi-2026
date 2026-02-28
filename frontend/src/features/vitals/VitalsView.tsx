@@ -10,7 +10,7 @@ interface Props {
 
 export default function VitalsView({ vitals, loading, error, onRefresh }: Props) {
   return (
-    <div className="p-4 bg-[#F3EFE0] dark:bg-[#1E293B] rounded-3xl shadow">
+    <div className="p-4 bg-app-card rounded-3xl shadow">
       <h2 className="text-lg font-semibold mb-2">Latest Vitals</h2>
       {loading && <p>Loading…</p>}
       {error && <p className="text-red-500">{error}</p>}

@@ -12,7 +12,7 @@ interface Props {
 
 export default function DietView({ plan, date, setDate, loading, error, onFetch }: Props) {
   return (
-    <div className="p-4 bg-[#F3EFE0] dark:bg-[#1E293B] rounded-3xl shadow max-w-md mx-auto">
+    <div className="p-4 bg-app-card rounded-3xl shadow max-w-md mx-auto">
       <h2 className="text-lg font-semibold mb-2">Diet Plan</h2>
       <input type="date" value={date} onChange={e => setDate(e.target.value)} className="border p-2 rounded mb-2" />
       <button onClick={onFetch} disabled={loading} className="px-4 py-2 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 disabled:opacity-50">{loading ? 'Loading…' : 'Get Plan'}</button>
