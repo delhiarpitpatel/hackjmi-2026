@@ -20,6 +20,9 @@ echo "installing the required libraries"
 pip install --upgrade pip 
 pip install -r requirements.txt 
 
+<<<<<<< HEAD
 cp .env.example .env
 
+=======
+>>>>>>> 6b3cbae (Little changes)
 echo "Setup Complete" 
