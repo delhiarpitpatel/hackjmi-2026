@@ -9,20 +9,24 @@ import {
   PlayCircle,
 } from 'lucide-react';
 
-export default function LandingPage() {
+interface LandingPageProps {
+  onStartJourney: () => void;
+  onLaunchApp: () => void;
+}
+
+export default function LandingPage({ onStartJourney, onLaunchApp }: LandingPageProps) {
   return (
     <div className="min-h-screen bg-app-main text-app-primary">
       {/* Navigation */}
       <header className="fixed top-0 w-full z-50 bg-app-main/70 backdrop-blur-md px-6 py-4 flex items-center justify-between">
         <span className="text-xl font-bold">ElevateOS</span>
         <nav className="flex items-center gap-6">
-          <a href="#features" className="hover:underline">
-            Features
-          </a>
-          <a href="#security" className="hover:underline">
-            Security
-          </a>
-          <button className="ml-4 px-8 py-4 border-2 border-indigo-600 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition">
+          <a href="#features" className="hover:underline">Features</a>
+          <a href="#security" className="hover:underline">Security</a>
+          <button
+            onClick={onLaunchApp}
+            className="ml-4 px-8 py-4 border-2 border-indigo-600 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition"
+          >
             Launch App
           </button>
         </nav>
@@ -38,10 +42,16 @@ export default function LandingPage() {
           risk prediction, and personalized AI coaching.
         </p>
         <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
-          <button className="px-8 py-4 border-2 border-app-accent bg-app-accent text-white rounded-full hover:bg-indigo-700 transition">
+          <button
+            onClick={onStartJourney}
+            className="px-8 py-4 border-2 border-app-accent bg-app-accent text-white rounded-full hover:bg-indigo-700 transition"
+          >
             Start Your Journey
           </button>
-          <button className="px-8 py-4 bg-app-card text-app-accent border-2 border-app-accent rounded-full hover:bg-indigo-50 transition flex items-center justify-center gap-2">
+          <button
+            onClick={onLaunchApp}
+            className="px-8 py-4 bg-app-card text-app-accent border-2 border-app-accent rounded-full hover:bg-indigo-50 transition flex items-center justify-center gap-2"
+          >
             <PlayCircle className="w-8 h-8" /> Watch Demo
           </button>
         </div>
@@ -106,15 +116,9 @@ export default function LandingPage() {
       <footer className="px-6 py-8 text-center bg-app-card">
         <p className="mb-4">Built for the Future of Healthcare</p>
         <div className="flex justify-center gap-6 text-sm">
-          <a href="#" className="hover:underline">
-            Privacy
-          </a>
-          <a href="#" className="hover:underline">
-            Terms
-          </a>
-          <a href="#" className="hover:underline">
-            Contact
-          </a>
+          <a href="#" className="hover:underline">Privacy</a>
+          <a href="#" className="hover:underline">Terms</a>
+          <a href="#" className="hover:underline">Contact</a>
         </div>
       </footer>
     </div>
