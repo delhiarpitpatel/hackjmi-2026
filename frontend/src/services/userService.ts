@@ -1,33 +1,28 @@
-// src/services/userService.ts
+import { apiClient } from '../api/client';
+import { UserResponse } from '../types/api';
 
-import apiClient from './apiClient';
-import { User } from '../types/api';
+export const getProfile = () =>
+  apiClient.get<UserResponse>('/users/me');
 
-export async function getProfile(): Promise<User> {
-  try {
-    const res = await apiClient.get<User>('/users/me');
-    return res.data;
-  } catch (err) {
-    console.error('getProfile error', err);
-    throw err;
-  }
-}
+export const updateProfile = (data: Partial<{
+  full_name: string;
+  email: string;
+  mobility_level: string;
+  language: string;
+  preferences: {
+    font_size: number;
+    high_contrast: boolean;
+    voice_enabled: boolean;
+  };
+}>) => apiClient.patch<UserResponse>('/users/me', data);
 
-export async function updateProfile(payload: Partial<User>): Promise<User> {
-  try {
-    const res = await apiClient.patch<User>('/users/me', payload);
-    return res.data;
-  } catch (err) {
-    console.error('updateProfile error', err);
-    throw err;
-  }
-}
 
-export async function deactivateAccount(): Promise<void> {
-  try {
-    await apiClient.delete('/users/me');
-  } catch (err) {
-    console.error('deactivateAccount error', err);
-    throw err;
-  }
+// Maps backend UserResponse → legacy User shape used in UsersView
+export async function getProfileLegacy() {
+  const res = await getProfile();
+  return {
+    ...res,
+    name: res.full_name,           // UsersView uses user.name
+    deviceName: res.full_name,
+  };
 }

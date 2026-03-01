@@ -1,14 +1,14 @@
-// src/services/workoutsService.ts
-
-import apiClient from './apiClient';
+import { apiClient } from '../api/client';
 import { WorkoutPlan } from '../types/api';
 
-export async function generateWorkoutPlan(payload: any): Promise<WorkoutPlan> {
-  try {
-    const res = await apiClient.post<WorkoutPlan>('/workouts/generate', payload);
-    return res.data;
-  } catch (err) {
-    console.error('generateWorkoutPlan error', err);
-    throw err;
-  }
-}
+export const generateWorkoutPlan = (data: {
+  conditions?: string[];
+  fitness_level?: string;
+  available_equipment?: string[];
+  duration_minutes?: number;
+}) =>
+  apiClient.post<WorkoutPlan>('/workouts/generate', {
+    fitness_level: 'beginner',
+    duration_minutes: 20,
+    ...data,
+  });

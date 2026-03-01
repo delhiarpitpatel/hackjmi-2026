@@ -1,33 +1,16 @@
-// src/services/medicationsService.ts
-
-import apiClient from './apiClient';
+import { apiClient } from '../api/client';
 import { Medication } from '../types/api';
 
-export async function addMedication(payload: any): Promise<Medication> {
-  try {
-    const res = await apiClient.post<Medication>('/medications', payload);
-    return res.data;
-  } catch (err) {
-    console.error('addMedication error', err);
-    throw err;
-  }
-}
+export const listMedications = () =>
+  apiClient.get<Medication[]>('/medications');
 
-export async function listMedications(): Promise<Medication[]> {
-  try {
-    const res = await apiClient.get<Medication[]>('/medications');
-    return res.data;
-  } catch (err) {
-    console.error('listMedications error', err);
-    throw err;
-  }
-}
+export const addMedication = (data: {
+  name: string;
+  dosage: string;
+  frequency: string;
+  times?: string[];
+  with_food?: boolean;
+}) => apiClient.post<Medication>('/medications', data);
 
-export async function removeMedication(id: string): Promise<void> {
-  try {
-    await apiClient.delete(`/medications/${id}`);
-  } catch (err) {
-    console.error('removeMedication error', err);
-    throw err;
-  }
-}
+export const deleteMedication = (id: string) =>
+  apiClient.delete<null>(`/medications/${id}`);

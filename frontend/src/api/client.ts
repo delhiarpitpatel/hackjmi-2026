@@ -51,3 +51,6 @@ export const api = {
   patch:  <T>(path: string, body: unknown)   => request<T>("PATCH",  path, body),
   delete: <T>(path: string)                  => request<T>("DELETE", path),
 };
+
+// Alias — used by services that import apiClient
+export const apiClient = api;

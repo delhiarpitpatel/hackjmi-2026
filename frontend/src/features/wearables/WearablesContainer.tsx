@@ -5,9 +5,9 @@ import WearablesView from './WearablesView';
 
 export default function WearablesContainer() {
   const [providers, setProviders] = useState<WearableProvider[]>([]);
-  const [devices, setDevices] = useState<ConnectedWearable[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [devices, setDevices]     = useState<ConnectedWearable[]>([]);
+  const [loading, setLoading]     = useState(false);
+  const [error, setError]         = useState<string | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -18,7 +18,8 @@ export default function WearablesContainer() {
         wearablesService.listWearables(),
       ]);
       setProviders(prov);
-      setDevices(devs);
+      // Map provider → deviceName for WearablesView
+      setDevices(devs.map(d => ({ ...d, deviceName: d.provider })));
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -28,5 +29,13 @@ export default function WearablesContainer() {
 
   useEffect(() => { load(); }, []);
 
-  return <WearablesView providers={providers} devices={devices} loading={loading} error={error} onRefresh={load} />;
+  return (
+    <WearablesView
+      providers={providers}
+      devices={devices}
+      loading={loading}
+      error={error}
+      onRefresh={load}
+    />
+  );
 }

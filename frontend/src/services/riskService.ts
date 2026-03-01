@@ -1,24 +1,8 @@
-// src/services/riskService.ts
-
-import apiClient from './apiClient';
+import { apiClient } from '../api/client';
 import { RiskPrediction } from '../types/api';
 
-export async function predictRisk(payload: any): Promise<RiskPrediction> {
-  try {
-    const res = await apiClient.post<RiskPrediction>('/risk/predict', payload);
-    return res.data;
-  } catch (err) {
-    console.error('predictRisk error', err);
-    throw err;
-  }
-}
+export const getRiskHistory = () =>
+  apiClient.get<RiskPrediction[]>('/risk/history');
 
-export async function getRiskHistory(): Promise<RiskPrediction[]> {
-  try {
-    const res = await apiClient.get<RiskPrediction[]>('/risk/history');
-    return res.data;
-  } catch (err) {
-    console.error('getRiskHistory error', err);
-    throw err;
-  }
-}
+export const predictRisk = (riskType: 'fall' | 'cardiac' | 'diabetic') =>
+  apiClient.post<RiskPrediction>('/risk/predict', { risk_type: riskType });

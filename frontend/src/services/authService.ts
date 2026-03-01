@@ -1,54 +1,61 @@
-// src/services/authService.ts
+import { setToken, clearToken } from '../api/client';
+import { TokenResponse, UserResponse } from '../types/api';
 
-import apiClient from './apiClient';
-import { AuthTokens, User } from '../types/api';
+const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api/v1';
 
-export async function register(data: { name: string; phone: string; password: string }): Promise<User> {
-  try {
-    const res = await apiClient.post<User>('/auth/register', data);
-    return res.data;
-  } catch (err) {
-    console.error('register error', err);
-    throw err;
+async function post<T>(path: string, body: unknown): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Request failed' }));
+    throw new Error(err.detail ?? 'Request failed');
   }
+  return res.json();
 }
 
-export async function login(phone: string, password: string): Promise<AuthTokens> {
-  try {
-    const res = await apiClient.post<AuthTokens>('/auth/login', { phone, password });
-    return res.data;
-  } catch (err) {
-    console.error('login error', err);
-    throw err;
+// OAuth2 form login — Swagger compatible
+export async function login(phone: string, password: string): Promise<{ accessToken: string; refreshToken: string }> {
+  const form = new URLSearchParams();
+  form.append('username', phone);
+  form.append('password', password);
+
+  const res = await fetch(`${BASE}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: form,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Login failed' }));
+    throw new Error(err.detail ?? 'Login failed');
   }
+
+  const data: TokenResponse = await res.json();
+  setToken(data.access_token);
+
+  return {
+    accessToken: data.access_token,
+    refreshToken: data.refresh_token,
+  };
 }
 
-export async function biometricLogin(payload: any): Promise<AuthTokens> {
-  try {
-    const res = await apiClient.post<AuthTokens>('/auth/biometric-login', payload);
-    return res.data;
-  } catch (err) {
-    console.error('biometricLogin error', err);
-    throw err;
-  }
+export async function register(
+  fullName: string,
+  phone: string,
+  password: string,
+): Promise<{ accessToken: string; refreshToken: string }> {
+  const data = await post<TokenResponse>('/auth/register', {
+    full_name: fullName,
+    phone,
+    password,
+  });
+  setToken(data.access_token);
+  return { accessToken: data.access_token, refreshToken: data.refresh_token };
 }
 
-export async function aadhaarVerify(payload: any): Promise<any> {
-  try {
-    const res = await apiClient.post('/auth/aadhaar-verify', payload);
-    return res.data;
-  } catch (err) {
-    console.error('aadhaarVerify error', err);
-    throw err;
-  }
-}
-
-export async function refreshToken(refreshToken: string): Promise<AuthTokens> {
-  try {
-    const res = await apiClient.post<AuthTokens>('/auth/refresh', { refreshToken });
-    return res.data;
-  } catch (err) {
-    console.error('refreshToken error', err);
-    throw err;
-  }
+export function logout() {
+  clearToken();
 }

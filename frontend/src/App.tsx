@@ -2,6 +2,7 @@ import { useState } from 'react';
 import * as Icons from 'lucide-react';
 import LandingPage from './LandingPage';
 import { useAuth } from './context/AuthContext';
+import Dashboard from './features/Dashboard';
 
 type Page = 'landing' | 'login' | 'register' | 'dashboard';
 
@@ -176,29 +177,7 @@ function RegisterPage({ onBack, onGoLogin }: { onBack: () => void; onGoLogin: ()
   );
 }
 
-// ── Dashboard (placeholder — replace with your full dashboard) ────────────────
-
-function Dashboard({ onLogout }: { onLogout: () => void }) {
-  const { user } = useAuth();
-
-  return (
-    <div className="min-h-screen bg-app-main flex flex-col items-center justify-center gap-6">
-      <div className="bg-app-card rounded-3xl p-8 shadow-xl border border-app-border text-center max-w-md w-full">
-        <div className="text-5xl mb-4">👴</div>
-        <h2 className="text-2xl font-bold text-app-primary mb-2">
-          Welcome, {user?.full_name?.split(' ')[0]}!
-        </h2>
-        <p className="text-app-secondary mb-6">You are successfully logged in.</p>
-        <button
-          onClick={onLogout}
-          className="px-6 py-3 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 transition"
-        >
-          Logout
-        </button>
-      </div>
-    </div>
-  );
-}
+// Dashboard is now imported from ./features/Dashboard
 
 // ── Reusable sub-components (kept from original) ──────────────────────────────
 

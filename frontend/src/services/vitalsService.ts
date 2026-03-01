@@ -1,34 +1,20 @@
-// src/services/vitalsService.ts
+import { apiClient } from '../api/client';
+import { VitalResponse } from '../types/api';
 
-import apiClient from './apiClient';
-import { VitalReading, VitalHistory } from '../types/api';
+export const getLatestVital = () =>
+  apiClient.get<VitalResponse>('/vitals/latest');
 
-export async function logVital(reading: Omit<VitalReading, 'id' | 'timestamp'>): Promise<VitalReading> {
-  try {
-    const res = await apiClient.post<VitalReading>('/vitals', reading);
-    return res.data;
-  } catch (err) {
-    console.error('logVital error', err);
-    throw err;
-  }
-}
+export const getVitals = (limit = 20) =>
+  apiClient.get<VitalResponse[]>(`/vitals?limit=${limit}`);
 
-export async function getVitalsHistory(): Promise<VitalHistory> {
-  try {
-    const res = await apiClient.get<VitalHistory>('/vitals');
-    return res.data;
-  } catch (err) {
-    console.error('getVitalsHistory error', err);
-    throw err;
-  }
-}
-
-export async function getLatestVital(): Promise<VitalReading> {
-  try {
-    const res = await apiClient.get<VitalReading>('/vitals/latest');
-    return res.data;
-  } catch (err) {
-    console.error('getLatestVital error', err);
-    throw err;
-  }
-}
+export const logVital = (data: {
+  heart_rate?: number;
+  systolic_bp?: number;
+  diastolic_bp?: number;
+  glucose_level?: number;
+  spo2?: number;
+  steps?: number;
+  sleep_hours?: number;
+  weight_kg?: number;
+  source?: string;
+}) => apiClient.post<VitalResponse>('/vitals', data);

@@ -1,43 +1,23 @@
-// src/services/wearablesService.ts
-
-import apiClient from './apiClient';
-import { WearableProvider, ConnectedWearable } from '../types/api';
+import { apiClient } from '../api/client';
+import { ConnectedWearable, WearableProvider } from '../types/api';
 
 export async function getProviders(): Promise<WearableProvider[]> {
-  try {
-    const res = await apiClient.get<WearableProvider[]>('/wearables/providers');
-    return res.data;
-  } catch (err) {
-    console.error('getProviders error', err);
-    throw err;
-  }
+  const res = await apiClient.get<{ providers: string[]; total_devices_supported: number }>(
+    '/wearables/providers',
+  );
+  // Convert string list → WearableProvider shape used in WearablesView
+  return res.providers.map(name => ({ id: name, name }));
 }
 
-export async function connectWearable(payload: any): Promise<ConnectedWearable> {
-  try {
-    const res = await apiClient.post<ConnectedWearable>('/wearables/connect', payload);
-    return res.data;
-  } catch (err) {
-    console.error('connectWearable error', err);
-    throw err;
-  }
-}
+export const listWearables = () =>
+  apiClient.get<ConnectedWearable[]>('/wearables');
 
-export async function listWearables(): Promise<ConnectedWearable[]> {
-  try {
-    const res = await apiClient.get<ConnectedWearable[]>('/wearables');
-    return res.data;
-  } catch (err) {
-    console.error('listWearables error', err);
-    throw err;
-  }
-}
+export const connectWearable = (data: {
+  provider: string;
+  access_token: string;
+  refresh_token?: string;
+}) =>
+  apiClient.post<ConnectedWearable>('/wearables/connect', data);
 
-export async function disconnectWearable(id: string): Promise<void> {
-  try {
-    await apiClient.delete(`/wearables/${id}`);
-  } catch (err) {
-    console.error('disconnectWearable error', err);
-    throw err;
-  }
-}
+export const disconnectWearable = (id: string) =>
+  apiClient.delete<null>(`/wearables/${id}`);

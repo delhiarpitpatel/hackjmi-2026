@@ -13,9 +13,10 @@ export default function UsersContainer() {
     setError(null);
     try {
       const profile = await userService.getProfile();
-      setUser(profile);
+      // Map full_name → name for UsersView
+      setUser({ ...profile, name: profile.full_name });
     } catch (err: any) {
-      setError(err.message); 
+      setError(err.message);
     } finally {
       setLoading(false);
     }

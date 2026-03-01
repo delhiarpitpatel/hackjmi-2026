@@ -1,24 +1,28 @@
-// src/services/dietService.ts
+import { apiClient } from '../api/client';
+import { MealPlan, MealPlanResponse } from '../types/api';
 
-import apiClient from './apiClient';
-import { MealPlan } from '../types/api';
-
-export async function generateMealPlan(payload: any): Promise<MealPlan> {
-  try {
-    const res = await apiClient.post<MealPlan>('/diet/generate', payload);
-    return res.data;
-  } catch (err) {
-    console.error('generateMealPlan error', err);
-    throw err;
-  }
+// Convert backend response array → legacy MealPlan shape used in DietView
+function toMealPlan(plans: MealPlanResponse[]): MealPlan {
+  return {
+    meals: plans.map(p => ({
+      mealType: p.meal_type,
+      items: p.items.map(i => `${i.name} (${i.quantity})`),
+    })),
+  };
 }
 
 export async function getMealPlan(date: string): Promise<MealPlan> {
-  try {
-    const res = await apiClient.get<MealPlan>(`/diet/${date}`);
-    return res.data;
-  } catch (err) {
-    console.error('getMealPlan error', err);
-    throw err;
-  }
+  const data = await apiClient.get<MealPlanResponse[]>(`/diet/${date}`);
+  return toMealPlan(data);
+}
+
+export async function generateMealPlan(
+  date: string,
+  conditions: string[] = [],
+): Promise<MealPlan> {
+  const data = await apiClient.post<MealPlanResponse[]>('/diet/generate', {
+    date,
+    conditions,
+  });
+  return toMealPlan(data);
 }
